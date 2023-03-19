@@ -42,6 +42,16 @@ def upload():
 
     df['Site Type'] = df['Site ID'].apply(get_site_type)
 
+    # Add Duration column
+    occurred = pd.to_datetime(df['Occurred On (NT)'], format='%Y-%m-%d %H:%M:%S')
+    cleared = pd.to_datetime(df['Cleared On (NT)'], format='%Y-%m-%d %H:%M:%S', errors='coerce')
+    df['Duration'] = (cleared - occurred).dt.total_seconds().div(60).fillna('')
+
+    # Round up Duration values
+    df.loc[df['Duration'] != '', 'Duration'] = df.loc[df['Duration'] != '', 'Duration'].astype(float).round(decimals=0)
+
+
+
 
     # convert the dataframe to an html table
     table = df.to_html(classes='table table-striped table-bordered table-hover')
