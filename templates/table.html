@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSV Data</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .table-responsive {
+            overflow-x: auto;
+            max-width: 100%;
+            -ms-overflow-style: -ms-autohiding-scrollbar;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container-fluid">
+        <h1>CSV Data</h1>
+        <div class="table-responsive">
+            {{ table|safe }}
+        </div>
+    </div>
+</body>
+</html>
