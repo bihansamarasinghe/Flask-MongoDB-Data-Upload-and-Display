@@ -1,5 +1,6 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 import pandas as pd
+import json
 
 app = Flask(__name__)
 
@@ -50,14 +51,25 @@ def upload():
     # Round up Duration values
     df.loc[df['Duration'] != '', 'Duration'] = df.loc[df['Duration'] != '', 'Duration'].astype(float).round(decimals=0)
 
+     # count the occurrences by site ID
+    site_counts = df['Site Type'].value_counts().reset_index()
+    site_counts.columns = ['Site Type', 'Counts']
 
+    # create a dictionary containing the data for the chart
+    chart_data = {
+        'labels': site_counts['Site Type'].tolist(),
+        'data': site_counts['Counts'].tolist()
+    }
 
+    # print the JSON string to the console in debug mode
+    if app.debug:
+        print(json.dumps(chart_data, indent=4))
 
     # convert the dataframe to an html table
     table = df.to_html(classes='table table-striped table-bordered table-hover')
 
     # render the table in the table.html template
-    return render_template('table.html', table=table)
+    return render_template('table.html', table=table,chart_data=chart_data)
 
 if __name__ == '__main__':
     app.run(debug=True)
