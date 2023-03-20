@@ -31,15 +31,21 @@
     <script>
         var ctx = document.getElementById('site-chart').getContext('2d');
         const chartData = {{ chart_data|safe }};
+        const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722'];
+        var backgroundColors = [];
+        for (var i = 0; i < chartData.labels.length; i++) {
+            var colorIndex = i % colors.length;
+            backgroundColors.push(colors[colorIndex]);
+        }
         var chart = new Chart(ctx, {
-            type: 'pie',
+            type: 'doughnut',
             data: {
                 labels: chartData.labels,
                 datasets: [{
                     label: 'Site Counts',
                     data: chartData.data,
-                    backgroundColor: ['rgba(54, 162, 235, 0.2)', 'rgba(255, 99, 132, 0.2)', 'rgba(255, 206, 86, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)'],
-                    borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
+                    backgroundColor: backgroundColors,
+                    borderColor: 'white',
                     borderWidth: 1
                 }]
             },
