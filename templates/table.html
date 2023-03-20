@@ -31,10 +31,21 @@
     <script>
         var ctx = document.getElementById('site-chart').getContext('2d');
         const chartData = {{ chart_data|safe }};
-        const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722'];
+        const colors = [
+          '#FFB3BA',
+          '#FFDFBA',
+          '#FFFFBA',
+          '#BAFFC9',
+          '#BAE1FF',
+          '#CBA5FF',
+          '#FFC6E7',
+          '#BAA5FF',
+          '#BAFFFA',
+          '#FFE1BA'
+        ];
         var backgroundColors = [];
         for (var i = 0; i < chartData.labels.length; i++) {
-            var colorIndex = i % colors.length;
+            var colorIndex = Math.floor(Math.random() * colors.length);
             backgroundColors.push(colors[colorIndex]);
         }
         var chart = new Chart(ctx, {
