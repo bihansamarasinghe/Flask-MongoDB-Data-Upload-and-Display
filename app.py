@@ -52,18 +52,19 @@ def upload():
     df.loc[df['Duration'] != '', 'Duration'] = df.loc[df['Duration'] != '', 'Duration'].astype(float).round(decimals=0)
 
      # count the occurrences by site ID
-    site_counts = df['Site Type'].value_counts().reset_index()
-    site_counts.columns = ['Site Type', 'Counts']
+    site_counts = df['Region ID'].value_counts().reset_index()
+    site_counts.columns = ['Region ID', 'Counts']
 
     # create a dictionary containing the data for the chart
     chart_data = {
-        'labels': site_counts['Site Type'].tolist(),
+        'labels': site_counts['Region ID'].tolist(),
         'data': site_counts['Counts'].tolist()
     }
 
     # print the JSON string to the console in debug mode
     if app.debug:
         print(json.dumps(chart_data, indent=4))
+        print(type(chart_data))
 
     # convert the dataframe to an html table
     table = df.to_html(classes='table table-striped table-bordered table-hover')

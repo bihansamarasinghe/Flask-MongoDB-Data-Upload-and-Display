@@ -15,11 +15,21 @@
 <body>
 
     <!-- display the chart -->
-    <canvas id="site-chart" width="400" height="400"></canvas>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <canvas id="site-chart" width="200" height="200"></canvas>
+            </div>
+            <div class="col-sm">
+              One of three columns
+            </div>
+          </div>
+    </div>
+    
 
     <script>
         var ctx = document.getElementById('site-chart').getContext('2d');
-        var chartData = JSON.parse('{{ chart_data|safe }}');
+        const chartData = {{chart_data|safe}};
         var chart = new Chart(ctx, {
             type: 'bar',
             data: {
