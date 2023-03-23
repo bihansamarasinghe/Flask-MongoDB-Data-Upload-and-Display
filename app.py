@@ -1,8 +1,16 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, redirect
 import pandas as pd
 import json
+from pymongo import MongoClient
+import config
 
 app = Flask(__name__)
+
+# MongoDB setup
+client = MongoClient(f"mongodb+srv://{config.MONGO_USER}:{config.MONGO_PASS}@cluster0.jycdcnt.mongodb.net/{config.MONGO_DBNAME}")
+
+db = client["ALARM_DB"]
+collection = db["HUAWEI_ALARM_LOG"]
 
 @app.route('/')
 def home():
@@ -13,7 +21,7 @@ def upload():
     # get the uploaded file
     file = request.files['file']
 
-    # read the file using pandas
+   # read the file using pandas
     df = pd.read_csv(file, skiprows=7, usecols=['Occurred On (NT)', 'Cleared On (NT)', 'MO Name', 'Name'])
     df.loc[df['MO Name'].str.startswith('NodeB Name='), 'MO Name'] = \
     df.loc[df['MO Name'].str.startswith('NodeB Name='), 'MO Name'].str.split(',', n=1).str[0].str.replace('NodeB Name=', '')
@@ -50,27 +58,37 @@ def upload():
 
     # Round up Duration values
     df.loc[df['Duration'] != '', 'Duration'] = df.loc[df['Duration'] != '', 'Duration'].astype(float).round(decimals=0)
+    # convert the dataframe to a JSON string
+    json_data = df.to_json(orient='records')
 
-     # count the occurrences by site ID
-    site_counts = df['Region ID'].value_counts().reset_index()
-    site_counts.columns = ['Region ID', 'Counts']
+    # delete all documents in the collection
+    collection.delete_many({})
 
-    # create a dictionary containing the data for the chart
-    chart_data = {
-        'labels': site_counts['Region ID'].tolist(),
-        'data': site_counts['Counts'].tolist()
-    }
+    # insert the JSON data into MongoDB
+    collection.insert_many(json.loads(json_data))
 
     # print the JSON string to the console in debug mode
-    if app.debug:
-        print(json.dumps(chart_data, indent=4))
-        print(type(chart_data))
+    #if app.debug:
+        #print(json.dumps(json_data, indent=4))
+        #print(type(json_data))
 
-    # convert the dataframe to an html table
+    # Return a JSON response indicating that the upload was successful
+    return redirect('/table')
+
+@app.route('/table')
+def show_table():
+    # retrieve the data from MongoDB
+    data = list(collection.find({}, {'_id': 0}))
+
+    # create a DataFrame from the data
+    df = pd.DataFrame(data)
+
+    # convert the DataFrame to an html table
     table = df.to_html(classes='table table-striped table-bordered table-hover')
 
     # render the table in the table.html template
-    return render_template('table.html', table=table,chart_data=chart_data)
+    return render_template('table.html', table=table)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
