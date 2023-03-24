@@ -3,14 +3,15 @@ import pandas as pd
 import json
 from pymongo import MongoClient
 import config
+from datetime import datetime
 
 app = Flask(__name__)
 
 # MongoDB setup
 client = MongoClient(f"mongodb+srv://{config.MONGO_USER}:{config.MONGO_PASS}@cluster0.jycdcnt.mongodb.net/{config.MONGO_DBNAME}")
 
-db = client["ALARM_DB"]
-collection = db["HUAWEI_ALARM_LOG"]
+db = client[config.MONGO_DBNAME]
+collection = db[config.MONGO_COL]
 
 @app.route('/')
 def home():
@@ -51,13 +52,39 @@ def upload():
 
     df['Site Type'] = df['Site ID'].apply(get_site_type)
 
+    def get_band(name):
+        if name == 'NodeB Unavailable':
+            return '3G'
+        elif name in ['CSL Fault', 'OML Fault']:
+            return '2G'
+        elif name == 'NE Is Disconnected':
+            return '4G'
+        else:
+            return ''
+
+    df['Band'] = df['Name'].apply(get_band)
+
+    # Add Duration column
+    # occurred = pd.to_datetime(df['Occurred On (NT)'], format='%Y-%m-%d %H:%M:%S')
+    # cleared = pd.to_datetime(df['Cleared On (NT)'], format='%Y-%m-%d %H:%M:%S', errors='coerce')
+    # df['Duration'] = (cleared - occurred).dt.total_seconds().div(60).fillna('')
+
+    # Round up Duration values
+    # df.loc[df['Duration'] != '', 'Duration'] = df.loc[df['Duration'] != '', 'Duration'].astype(float).round(decimals=0)
+
     # Add Duration column
     occurred = pd.to_datetime(df['Occurred On (NT)'], format='%Y-%m-%d %H:%M:%S')
-    cleared = pd.to_datetime(df['Cleared On (NT)'], format='%Y-%m-%d %H:%M:%S', errors='coerce')
-    df['Duration'] = (cleared - occurred).dt.total_seconds().div(60).fillna('')
+    
+    # fill 'Cleared On (NT)' column with current date and time
+    cleared = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    df['Cleared On (NT)'] = cleared
+    
+    df['Duration'] = (pd.to_datetime(cleared, format='%Y-%m-%d %H:%M:%S') - occurred).dt.total_seconds().div(60).fillna('')
 
     # Round up Duration values
     df.loc[df['Duration'] != '', 'Duration'] = df.loc[df['Duration'] != '', 'Duration'].astype(float).round(decimals=0)
+
+
     # convert the dataframe to a JSON string
     json_data = df.to_json(orient='records')
 
