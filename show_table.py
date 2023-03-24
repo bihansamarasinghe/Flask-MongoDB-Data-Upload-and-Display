@@ -10,7 +10,7 @@ def show_table():
     df = pd.DataFrame(data)
 
     # convert the DataFrame to an html table
-    table = df.to_html(classes='table table-striped table-bordered table-hover')
+    data_dict = df.to_dict('records')
 
     # render the table in the table.html template
-    return render_template('table.html', table=table)
+    return render_template('huawei_table.html', data=data_dict)

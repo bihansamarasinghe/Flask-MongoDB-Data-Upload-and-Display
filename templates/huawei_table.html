@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSV Data Table</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4-4.6.0/jq-3.3.1/dt-1.10.25/r-2.2.9/datatables.min.css"/>
+    
+</head>
+<body>
+    <div class="container">
+        <h1>CSV Data Table</h1>
+        <table id="csv-table" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Occurred On (NT)</th>
+                    <th>Cleared On (NT)</th>
+                    <th>Site ID</th>
+                    <th>MO Name</th>
+                    <th>Name</th>
+                    <th>Band</th>
+                    <th>Duration (BTSmin)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                    <tr>
+                        <td>{{ row['Occurred On (NT)'] }}</td>
+                        <td>{{ row['Cleared On (NT)'] }}</td>
+                        <td>{{ row['Site ID'] }}</td>
+                        <td>{{ row['MO Name'] }}</td>
+                        <td>{{ row['Name'] }}</td>
+                        <td>{{ row['Band'] }}</td>
+                        <td>{{ row['Duration (BTSmin)'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4-4.6.0/jq-3.3.1/dt-1.10.25/r-2.2.9/datatables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#csv-table').DataTable();
+        } );
+    </script>
+</body>
+</html>
