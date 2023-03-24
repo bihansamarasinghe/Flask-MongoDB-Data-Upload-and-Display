@@ -65,25 +65,29 @@ def upload():
     df['Band'] = df['Name'].apply(get_band)
 
     # Add Duration column
-    # occurred = pd.to_datetime(df['Occurred On (NT)'], format='%Y-%m-%d %H:%M:%S')
-    # cleared = pd.to_datetime(df['Cleared On (NT)'], format='%Y-%m-%d %H:%M:%S', errors='coerce')
-    # df['Duration'] = (cleared - occurred).dt.total_seconds().div(60).fillna('')
+    #occurred = pd.to_datetime(df['Occurred On (NT)'], format='%Y-%m-%d %H:%M:%S')
+    #cleared = pd.to_datetime(df['Cleared On (NT)'], format='%Y-%m-%d %H:%M:%S', errors='coerce')
+    #df['Duration'] = (cleared - occurred).dt.total_seconds().div(60).fillna('')
 
     # Round up Duration values
-    # df.loc[df['Duration'] != '', 'Duration'] = df.loc[df['Duration'] != '', 'Duration'].astype(float).round(decimals=0)
+    #df.loc[df['Duration'] != '', 'Duration'] = df.loc[df['Duration'] != '', 'Duration'].astype(float).round(decimals=0)
 
     # Add Duration column
     occurred = pd.to_datetime(df['Occurred On (NT)'], format='%Y-%m-%d %H:%M:%S')
-    
+
     # fill 'Cleared On (NT)' column with current date and time
     cleared = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    df['Cleared On (NT)'] = cleared
-    
-    df['Duration'] = (pd.to_datetime(cleared, format='%Y-%m-%d %H:%M:%S') - occurred).dt.total_seconds().div(60).fillna('')
+
+    # replace '-' with current date and time in 'Cleared On (NT)' column
+    df.loc[df['Cleared On (NT)'] == '\t\t-', 'Cleared On (NT)'] = cleared
+
+    df['Duration'] = (pd.to_datetime(df['Cleared On (NT)'], format='%Y-%m-%d %H:%M:%S') - occurred).dt.total_seconds().div(60).fillna('')
 
     # Round up Duration values
-    df.loc[df['Duration'] != '', 'Duration'] = df.loc[df['Duration'] != '', 'Duration'].astype(float).round(decimals=0)
+    df.loc[df['Duration'] != '', 'Duration'] = df.loc[df['Duration'] != '', 'Duration'].astype(float).round(decimals=0).astype(int)
 
+    # Rename the column
+    df = df.rename(columns={'Duration': 'Duration (BTSmin)'})
 
     # convert the dataframe to a JSON string
     json_data = df.to_json(orient='records')

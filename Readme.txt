@@ -17,5 +17,7 @@ render the table in the table.html template
     create a dictionary containing the data for the chart
     print the JSON string to the console in debug mode
 
-
+Connect with MongoDB
+Update Cleared On column with Date Now
+replace '-' with current date and time in 'Cleared On (NT)' column
 
