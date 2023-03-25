@@ -13,29 +13,15 @@
         <table id="csv-table" class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th>Occurred On (NT)</th>
-                    <th>Cleared On (NT)</th>
                     <th>Site ID</th>
-                    <th>MO Name</th>
-                    <th>Name</th>
-                    <th>Region ID</th>
-                    <th>Site Type</th>
-                    <th>Band</th>
-                    <th>Duration (BTSmin)</th>
+                    <th>Site Name</th>
                 </tr>
             </thead>
             <tbody>
                 {% for row in data %}
                     <tr>
-                        <td>{{ row['Occurred On (NT)'] }}</td>
-                        <td>{{ row['Cleared On (NT)'] }}</td>
                         <td>{{ row['Site ID'] }}</td>
-                        <td>{{ row['MO Name'] }}</td>
-                        <td>{{ row['Name'] }}</td>
-                        <td>{{ row['Region ID'] }}</td>
-                        <td>{{ row['Site Type'] }}</td>
-                        <td>{{ row['Band'] }}</td>
-                        <td>{{ row['Duration (BTSmin)'] }}</td>
+                        <td>{{ row['Site Name'] }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

@@ -80,10 +80,10 @@ def upload_huawei():
     json_data = df.to_json(orient='records')
 
     # delete all documents in the collection
-    mongodb.collection.delete_many({})
+    mongodb.collection_hua.delete_many({})
 
     # insert the JSON data into MongoDB
-    mongodb.collection.insert_many(json.loads(json_data))
+    mongodb.collection_hua.insert_many(json.loads(json_data))
 
     # print the JSON string to the console in debug mode
     #if app.debug:
@@ -91,4 +91,29 @@ def upload_huawei():
         #print(type(json_data))
 
     # Return a JSON response indicating that the upload was successful
-    return redirect('/table')
+    return redirect('/tablehua')
+
+def upload_ftg():
+    
+    # get the uploaded file
+    file = request.files['file2']
+
+   # read the file using pandas
+    df = pd.read_excel(file)
+
+    # convert the dataframe to a JSON string
+    json_data = df.to_json(orient='records')
+
+    # delete all documents in the collection
+    mongodb.collection_ftg.delete_many({})
+
+    # insert the JSON data into MongoDB
+    mongodb.collection_ftg.insert_many(json.loads(json_data))
+
+    # print the JSON string to the console in debug mode
+    #if app.debug:
+        #print(json.dumps(json_data, indent=4))
+        #print(type(json_data))
+
+    # Return a JSON response indicating that the upload was successful
+    return redirect('/tableftg')
