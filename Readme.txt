@@ -21,3 +21,7 @@ Connect with MongoDB
 Update Cleared On column with Date Now
 replace '-' with current date and time in 'Cleared On (NT)' column
 
+FTG table upload
+Compare values with ftg table put them into New column
+
+

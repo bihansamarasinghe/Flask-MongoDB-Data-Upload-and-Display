@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from show_table import show_hua_table,show_ftg_table
-from upload import upload_huawei,upload_ftg
+from upload import upload_huawei,upload_ftg,merge
 
 app = Flask(__name__, static_url_path='/static')
 
@@ -30,6 +30,12 @@ def show_table_huawei():
 def show_table_ftg():
 
     result = show_ftg_table()
+    return result
+
+@app.route('/tablemerge')
+def show_table_merge():
+
+    result = merge()
     return result
 
 if __name__ == '__main__':

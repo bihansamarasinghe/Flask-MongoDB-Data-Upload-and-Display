@@ -1,4 +1,4 @@
-from flask import request, redirect
+from flask import request, redirect , render_template
 import pandas as pd
 import json
 from datetime import datetime
@@ -117,3 +117,30 @@ def upload_ftg():
 
     # Return a JSON response indicating that the upload was successful
     return redirect('/tableftg')
+
+def merge():
+
+    # create df1
+    data1 = list(mongodb.collection_hua.find({}, {'_id': 0}))
+    df1 = pd.DataFrame(data1)
+
+    # create df2
+    data2 = list(mongodb.collection_ftg.find({}, {'_id': 0}))
+    df2 = pd.DataFrame(data2)
+
+    # perform vlookup
+    df_merged = pd.merge(df1, df2, on='Site ID', how='left')
+
+    # create 'FTG Status' column and set values based on condition
+    df_merged['FTG Status'] = ''
+    df_merged.loc[df_merged['Site ID'].isin(df2['Site ID']), 'FTG Status'] = 'FTG'
+
+
+    # convert the DataFrame to an html table
+    data_dict = df_merged.to_dict('records')
+
+    #print(df_merged)
+
+    # render the table in the table.html template
+    return render_template('merge_table.html', data=data_dict)
+
