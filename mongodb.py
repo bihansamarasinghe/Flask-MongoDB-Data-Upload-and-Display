@@ -7,3 +7,4 @@ client = MongoClient(f"mongodb+srv://{config.MONGO_USER}:{config.MONGO_PASS}@clu
 db = client[config.MONGO_DBNAME]
 collection_hua = db[config.MONGO_COL_HUA]
 collection_ftg = db[config.MONGO_COL_FTG]
+collection_stg = db[config.MONGO_COL_STG]

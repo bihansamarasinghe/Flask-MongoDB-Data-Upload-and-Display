@@ -25,3 +25,4 @@ FTG table upload
 Compare values with ftg table put them into New column
 
 
+use fontawesome icons and google fonts to modify that.Also use material ui concepts.Use only Tailwind CSS.forms should be in 3 columns.background color should #14213d.You can match text color as better to background.

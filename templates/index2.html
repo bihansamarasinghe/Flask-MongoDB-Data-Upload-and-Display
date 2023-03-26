@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload CSV file</title>
+</head>
+<body>
+    <h1>Upload a Huawei CSV file</h1>
+    <form method="post" action="{{ url_for('uploadhuawei') }}" enctype="multipart/form-data">
+        <input type="file" name="file1" required>
+        <input type="submit" value="Upload">
+    </form>
+
+    <br>
+
+    <h1>Upload FTG Excel file</h1>
+    <form method="post" action="{{ url_for('uploadftg') }}" enctype="multipart/form-data">
+        <input type="file" name="file2" required>
+        <input type="submit" value="Upload">
+    </form>
+
+    
+    <h1>Upload STG Excel file</h1>
+    <form method="post" action="{{ url_for('uploadstg') }}" enctype="multipart/form-data">
+        <input type="file" name="file3" required>
+        <input type="submit" value="Upload">
+    </form>
+</body>
+</html>

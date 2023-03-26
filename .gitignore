@@ -6,3 +6,7 @@ app_test.py
 mongo.py
 AlarmLogs - current log.csv
 FTG.xlsx
+automate.py
+vlookup.py
+AlarmLogs20230326141824197.csv
+STG.xlsx

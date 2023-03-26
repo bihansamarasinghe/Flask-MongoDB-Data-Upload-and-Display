@@ -18,10 +18,11 @@
                     <th>Site ID</th>
                     <th>MO Name</th>
                     <th>Name</th>
-                    <th>Region ID</th>
+                    <th>Reg ID</th>
                     <th>Site Type</th>
                     <th>Band</th>
                     <th>Duration (BTSmin)</th>
+                    <th>Geny Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -36,6 +37,7 @@
                         <td>{{ row['Site Type'] }}</td>
                         <td>{{ row['Band'] }}</td>
                         <td>{{ row['Duration (BTSmin)'] }}</td>
+                        <td>{{ row['Geny Status'] }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
